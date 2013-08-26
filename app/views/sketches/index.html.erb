@@ -1,3 +1,5 @@
+<h1>Sketchy</h1>
+
 <table class='table table-striped table-hover'>
 	<thead>
 		<th>Title</th>
@@ -8,10 +10,19 @@
   <tbody>
     <% @sketches.each do |sketch| %>
     <tr>
-      <td><%= link_to sketch.title, sketch_path(sketch) %></td>
+      <td>
+        <%= link_to sketch.title, :action => 'show', :id => sketch.id %>
+      </td>
       <td><%= sketch.created_at %></td>
       <td><%= sketch.updated_at %></td>
+      <td>
+        <%= link_to 'Delete', 
+          { :action => 'destroy', :id => sketch.id },
+          :confirm => "Are you sure?", :method => :delete %>
+        </td>
     </tr>
     <% end %>
   </tbody>
 </table>
+
+<%= link_to 'New', new_sketch_path(), :class => 'btn btn-primary' %>
