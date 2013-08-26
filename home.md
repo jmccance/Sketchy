@@ -2,6 +2,6 @@
 
 This is a test wiki.
 
-* [Dramatis personæ]
+* [[Drama]]
 
 * Markdown support is enabled.
