@@ -1,5 +1,8 @@
 
-<h1><%= @sketch.title %></h1>
+<h1>
+  <%= link_to '&larr;'.html_safe, sketches_path() %>
+  <%= @sketch.title %>
+</h1>
 
 <div class='canvas-container'>
   <canvas id='canvas'

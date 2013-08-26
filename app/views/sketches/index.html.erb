@@ -5,12 +5,13 @@
 		<th>Title</th>
     <th>Date Created</th>
     <th>Date Modified</th>
+    <th></th>
   </thead>
 
   <tbody>
     <% @sketches.each do |sketch| %>
     <tr>
-      <td>
+      <td width='50%'>
         <%= link_to sketch.title, :action => 'show', :id => sketch.id %>
       </td>
       <td><%= sketch.created_at %></td>
