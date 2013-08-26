@@ -2,6 +2,6 @@
 
 This is a test wiki.
 
-* [Dramatis personæ]()
+* [Dramatis personæ]
 
 * Markdown support is enabled.
