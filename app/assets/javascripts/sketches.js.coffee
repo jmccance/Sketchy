@@ -10,33 +10,34 @@ class Canvas
     @elt.addEventListener('mousedown', (e) => @onMouseDown(e))
     @elt.addEventListener('mousemove', (e) => @onMouseMove(e))
     @elt.addEventListener('mouseup',   (e) => @onMouseUp(e))
+    @elt.addEventListener('mouseover', (e) => @onMouseEnter(e))
 
-  origin: () ->
+  getRelativeCoords: (p) ->
     rect = @elt.getBoundingClientRect()
-    { x: rect.left, y: rect.top }
+    origin = { x: rect.left, y: rect.top }
+    { x: p.x - origin.x, y: p.y - origin.y }
 
   drawLine: (p0, p1) ->
-    o = @origin()
     @g.beginPath()
-    @g.moveTo(p0.x - o.x, p0.y - o.y)
-    @g.lineTo(p1.x - o.x, p1.y - o.y)
+    @g.moveTo(p0.x, p0.y)
+    @g.lineTo(p1.x, p1.y)
     @g.stroke()
 
+  onMouseEnter: (e) ->
+    @pos = @getRelativeCoords(e)
+
   onMouseDown: (e) ->
-    @pos =
-    x: e.x
-    y: e.y
     @state = 'dragging'
+    @pos = @getRelativeCoords(e)
 
   onMouseMove: (e) ->
     if @state == 'dragging'
+      pt = @getRelativeCoords(e)
       @g.strokeStyle = @color
       @g.lineWidth = 4
       @g.lineCap = 'round'
-      @drawLine(@pos, e)
-      @pos =
-        x: e.x
-        y: e.y
+      @drawLine(@pos, pt)
+      @pos = pt
 
   onMouseUp: (e) ->
     @state = 'idle'
