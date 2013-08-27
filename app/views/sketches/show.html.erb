@@ -6,7 +6,15 @@
 
 <div class='canvas-container'>
   <canvas id='canvas'
-          data-title='<%= @sketch.title %>'
           width='640' 
           height='480'></canvas>
+
+  <form class='form-horizontal'>
+    <div class='control-group'>
+      <label class='control-label' for='color'>Color: </label>
+      <div class='controls'>
+        <input id='color' data-bind='value: fgColor'></input>
+      </div>
+    </div>
+  </form>
 </div>
