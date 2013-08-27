@@ -51,4 +51,6 @@ class SketchyApp
         write: (color) =>
           @canvas.color = color
 
-ko.applyBindings(new SketchyApp($('#canvas')[0]))
+# Apply bindings appropriate to the page
+canvas = $('#canvas')[0]
+if canvas? then ko.applyBindings(new SketchyApp($('#canvas')[0]))
