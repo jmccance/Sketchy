@@ -7,10 +7,15 @@ class Sketch
   constructor: (@id, @title, @data) ->
 
 class SketchService
-  constructor: (@sketchUrl) ->
+  constructor: (@sketchPath) ->
 
   save: (sketch) ->
     console.log(sketch)
+    $.ajax
+      type: 'PUT'
+      url: @sketchPath
+      contentType: 'application/json'
+      data: JSON.stringify({sketch: sketch})
 
 ##
 # Provides drawing functionality on an injected <canvas> element.
@@ -68,9 +73,10 @@ class Canvas
 # Knockout View Controller
 
 class SketchyApp
-  constructor: (@sketchSvc, @container, @canvasElt) ->
+  constructor: (@container, @canvasElt) ->
     @canvas = new Canvas(@canvasElt[0])
     @sketch = @_getSketchFromContainer()
+    @sketchSvc = @_getSketchServiceFromContainer()
 
     @fgColor = ko.computed
         read: => @canvas.color
@@ -87,13 +93,16 @@ class SketchyApp
   _getSketchFromContainer: -> 
     new Sketch(@container.data('sketch-id'), @container.data('sketch-title'))
 
+  _getSketchServiceFromContainer: -> 
+    new SketchService(@container.data('sketch-path'))
+
+
 # Apply bindings appropriate to the page
 
 canvas = $('#canvas')[0]
 
 if canvas? then ko.applyBindings(
   new SketchyApp(
-    new SketchService
     $('#sketchy-app'),
     $('#canvas')
   )

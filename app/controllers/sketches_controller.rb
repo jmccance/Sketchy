@@ -15,19 +15,36 @@ class SketchesController < ApplicationController
 
   def show
     @sketch = Sketch.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @sketch }
+    end
   end
 
   def edit
   end
 
   def update
+    json = params[:sketch]
+    sketch = Sketch.find(json[:id])
+
+    sketch.title = json[:title]
+    # TODO Update other fields
+
+    sketch.save
+
+    respond_to do |format|
+      format.json { render json: sketch}
+    end
   end
 
   def destroy
     sketch = Sketch.find(params[:id])
     sketch.destroy()
-    if request.format.html?
-      redirect_to sketches_url()
+
+    respond_to do |format|
+      format.html { redirect_to sketches_url() }
     end
   end 
 
