@@ -9,16 +9,27 @@
     <input value='<%= @sketch.title %>' data-bind='value: sketchTitle'></input>
   </h1>
 
+  <table class='color-picker'>
+    <tr>
+      <td class='red'     data-bind='click: setColor'></td>
+      <td class='orange'  data-bind='click: setColor'></td>
+      <td class='yellow'  data-bind='click: setColor'></td>
+      <td class='green'   data-bind='click: setColor'></td>
+      <td class='blue'    data-bind='click: setColor'></td>
+      <td class='black'   data-bind='click: setColor'></td>
+      <td class='white'   data-bind='click: setColor'></td>
+      <td class='save'>
+        <button data-bind='click: save'class='btn btn-primary'>Save</button>
+      </td>
+    </tr>
+  </table>
   <form class='sketch-controls form-inline'>
-    <label class='control-label' for='color'>Color: </label>
-    <input id='color' data-bind='value: fgColor'></input>
-    <button data-bind='click: save'
-            class='btn btn-primary'>Save</button>
+    
   </form>
 
   <div class='canvas-container'>
     <canvas id='canvas'
-            width='640' 
+            width='940'
             height='480'></canvas>
   </div>
 </div>

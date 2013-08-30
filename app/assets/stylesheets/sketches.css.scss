@@ -3,5 +3,26 @@
   float: left;
 }
 
-#sketch-controls {
+.color-picker {
+
+  width: 100%;
+  table-layout: fixed;
+
+  td {
+    border: 1px solid black;
+    height: 2em;
+  }
+
+  .red    { background: red; }
+  .orange { background: orange; }
+  .yellow { background: yellow; }
+  .green  { background: green; }
+  .blue   { background: blue; }
+  .black  { background: black; }
+  .white  { background: white; }
+
+  .save {
+    border: none;
+    text-align: right;
+  }
 }

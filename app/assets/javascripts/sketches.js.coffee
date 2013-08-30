@@ -77,21 +77,39 @@ class Canvas
 # Knockout View Controller
 
 class SketchyApp
+
+  ##
+  # @container - the jQuery element containing the Sketchy application
+  # @canvasElt - the jQuery element for the canvas we're drawing on
   constructor: (@container, @canvasElt) ->
     @sketchSvc = @_getSketchServiceFromContainer()
 
     @sketch = @_getSketchFromContainer()
-    img = new Image()
-    img.src = @sketch.image
-    @canvas = new Canvas(@canvasElt[0], img)
-
-    @fgColor = ko.computed
-        read: => @canvas.color
-        write: (color) => @canvas.color = color
+    @canvas = new Canvas(
+        @canvasElt[0],
+        # Image doesn't seem to have a way to set the source in the
+        # constructor, hence the function oddity.
+        do => 
+          img = new Image
+          img.src = @sketch.image
+          img
+    )
     
     @sketchTitle = ko.computed
         read: => @sketch.title
         write: (title) => @sketch.title = title
+
+    @fgColor = ko.computed
+        read: => @canvas.color
+        write: (color) => @canvas.color = color
+
+  setColor: (data, e) ->
+    # TODO Revisit color-picker implementation.
+    # Using the class name directly is not great way to handle setting the 
+    # color, since it creates a tight coupling between the classes used in 
+    # the view and the pen color.
+    @fgColor(e.target.className)
+    console.log(@fgColor())
 
   save: () ->
     @sketch.image = @canvas.toPng()
@@ -106,7 +124,6 @@ class SketchyApp
 
   _getSketchServiceFromContainer: -> 
     new SketchService(@container.data('sketch-path'))
-
 
 # Apply bindings appropriate to the page
 
