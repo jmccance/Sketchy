@@ -1,3 +1,19 @@
+##
+# Models a Sketch, suitable for pushing to the backend.
+#
+# A Sketch, as far as the front-end is concerned, consists
+# of a title and the raster data as a base64-encoded string.
+class Sketch
+  constructor: (@id, @title, @data) ->
+
+class SketchService
+  constructor: (@sketchUrl) ->
+
+  save: (sketch) ->
+    console.log(sketch)
+
+##
+# Provides drawing functionality on an injected <canvas> element.
 class Canvas
   constructor: (@elt) ->
     @g = @elt.getContext('2d')
@@ -42,16 +58,43 @@ class Canvas
   onMouseUp: (e) ->
     @state = 'idle'
 
-# Knockout Experiments
+  toPng: ->
+    @elt.toDataURL()
+
+  loadFrom: (image) ->
+    @g.clearRect(0, 0, @elt.width, @elt.height)
+    @g.drawImage(image, 0, 0)
+
+# Knockout View Controller
 
 class SketchyApp
-  constructor: (@canvasElt) ->
-    @canvas = new Canvas(@canvasElt)
+  constructor: (@sketchSvc, @container, @canvasElt) ->
+    @canvas = new Canvas(@canvasElt[0])
+    @sketch = @_getSketchFromContainer()
+
     @fgColor = ko.computed
-        read: () => @canvas.color
-        write: (color) =>
-          @canvas.color = color
+        read: => @canvas.color
+        write: (color) => @canvas.color = color
+    
+    @sketchTitle = ko.computed
+        read: => @sketch.title
+        write: (title) => @sketch.title = title
+
+  save: () ->
+    @sketch.data = @canvas.toPng()
+    @sketchSvc.save(@sketch)
+
+  _getSketchFromContainer: -> 
+    new Sketch(@container.data('sketch-id'), @container.data('sketch-title'))
 
 # Apply bindings appropriate to the page
+
 canvas = $('#canvas')[0]
-if canvas? then ko.applyBindings(new SketchyApp($('#canvas')[0]))
+
+if canvas? then ko.applyBindings(
+  new SketchyApp(
+    new SketchService
+    $('#sketchy-app'),
+    $('#canvas')
+  )
+)

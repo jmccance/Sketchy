@@ -1,20 +1,23 @@
 
-<h1>
-  <%= link_to '&larr;'.html_safe, sketches_path() %>
-  <%= @sketch.title %>
-</h1>
+<div id='sketchy-app'
+     data-sketch-title='<%= @sketch.title %>'
+     data-sketch-id='<%= @sketch.id %>'
+     data-sketch-data='<%= @sketch.image.to_data_url %>'>
+  <h1>
+    <%= link_to '&larr;'.html_safe, sketches_path() %>
+    <input value='<%= @sketch.title %>' data-bind='value: sketchTitle'></input>
+  </h1>
 
-<div class='canvas-container'>
-  <canvas id='canvas'
-          width='640' 
-          height='480'></canvas>
-
-  <form class='form-horizontal'>
-    <div class='control-group'>
-      <label class='control-label' for='color'>Color: </label>
-      <div class='controls'>
-        <input id='color' data-bind='value: fgColor'></input>
-      </div>
-    </div>
+  <form class='sketch-controls form-inline'>
+    <label class='control-label' for='color'>Color: </label>
+    <input id='color' data-bind='value: fgColor'></input>
+    <button data-bind='click: save'
+            class='btn btn-primary'>Save</button>
   </form>
+
+  <div class='canvas-container'>
+    <canvas id='canvas'
+            width='640' 
+            height='480'></canvas>
+  </div>
 </div>

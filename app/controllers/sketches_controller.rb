@@ -7,9 +7,7 @@ class SketchesController < ApplicationController
   def new
     @sketch = Sketch.new
     @sketch.save
-    if request.format.html?
-      redirect_to sketches_url(@sketch)
-    end
+    redirect_to sketch_url(@sketch)
   end
 
   def create
