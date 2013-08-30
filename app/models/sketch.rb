@@ -6,15 +6,11 @@ class Sketch
   one :image
 
   def initialize(attrs = {})
+    # It's extremely inconvenient to not have the image initialized by 
+    # default.
     self.image ||= Image.new
+
+    super(attrs)
   end
-  
-  # before_create :init_image
-
-  # private
-
-  #   def init_image
-  #     self.image ||= Image.new
-  #   end
 
 end
