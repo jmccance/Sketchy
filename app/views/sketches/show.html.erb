@@ -2,7 +2,7 @@
 <div id='sketchy-app'
      data-sketch-title='<%= @sketch.title %>'
      data-sketch-id='<%= @sketch.id %>'
-     data-sketch-data='<%= @sketch.image.to_data_url %>'
+     data-sketch-image='<%= @sketch.image.to_data_url %>'
      data-sketch-path='<%= sketch_path(@sketch) %>'>
   <h1>
     <%= link_to '&larr;'.html_safe, sketches_path() %>

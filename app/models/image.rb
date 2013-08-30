@@ -5,8 +5,7 @@ class Image
   key :data,      Binary, :default => ''
 
   def to_data_url
-    # NYI
-    ""
+    "data:#{self.type};base64,#{Base64.strict_encode64(self.data.to_s)}"
   end
 
 end

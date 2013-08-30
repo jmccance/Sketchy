@@ -1,5 +1,7 @@
 class SketchesController < ApplicationController
 
+  DATA_URL_PATTERN = /^data:([^;]*);\s*base64,\s*(.*)/
+
   def index
     @sketches = Sketch.all
   end
@@ -30,6 +32,7 @@ class SketchesController < ApplicationController
     sketch = Sketch.find(json[:id])
 
     sketch.title = json[:title]
+    sketch.image = data_url_to_image(json[:image])
     # TODO Update other fields
 
     sketch.save
@@ -46,6 +49,23 @@ class SketchesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to sketches_url() }
     end
-  end 
+  end
+
+  private
+
+  def data_url_to_image(data_url)
+    img = Image.new
+
+    unless data_url.empty?
+      data_url.scan(DATA_URL_PATTERN).map do |type, data|
+        img.type = type
+        img.data = Base64.decode64(data)
+      end
+    else
+      Rails.logger.error('data_url was empty')
+    end
+
+    return img
+  end
 
 end

@@ -4,13 +4,15 @@
 # A Sketch, as far as the front-end is concerned, consists
 # of a title and the raster data as a base64-encoded string.
 class Sketch
-  constructor: (@id, @title, @data) ->
+  constructor: (@id, @title, @image) ->
 
+##
+# Service to handle saving a given sketch. In the future, may be fleshed out
+# to serve a more generalized CRUDdy role.
 class SketchService
   constructor: (@sketchPath) ->
 
   save: (sketch) ->
-    console.log(sketch)
     $.ajax
       type: 'PUT'
       url: @sketchPath
@@ -20,7 +22,7 @@ class SketchService
 ##
 # Provides drawing functionality on an injected <canvas> element.
 class Canvas
-  constructor: (@elt) ->
+  constructor: (@elt, image) ->
     @g = @elt.getContext('2d')
     @color = 'black'
     @pos =
@@ -32,6 +34,8 @@ class Canvas
     @elt.addEventListener('mousemove', (e) => @onMouseMove(e))
     @elt.addEventListener('mouseup',   (e) => @onMouseUp(e))
     @elt.addEventListener('mouseover', (e) => @onMouseEnter(e))
+
+    @g.drawImage(image, 0, 0)
 
   getRelativeCoords: (p) ->
     rect = @elt.getBoundingClientRect()
@@ -74,9 +78,12 @@ class Canvas
 
 class SketchyApp
   constructor: (@container, @canvasElt) ->
-    @canvas = new Canvas(@canvasElt[0])
-    @sketch = @_getSketchFromContainer()
     @sketchSvc = @_getSketchServiceFromContainer()
+
+    @sketch = @_getSketchFromContainer()
+    img = new Image()
+    img.src = @sketch.image
+    @canvas = new Canvas(@canvasElt[0], img)
 
     @fgColor = ko.computed
         read: => @canvas.color
@@ -87,11 +94,15 @@ class SketchyApp
         write: (title) => @sketch.title = title
 
   save: () ->
-    @sketch.data = @canvas.toPng()
+    @sketch.image = @canvas.toPng()
     @sketchSvc.save(@sketch)
 
   _getSketchFromContainer: -> 
-    new Sketch(@container.data('sketch-id'), @container.data('sketch-title'))
+    new Sketch(
+      @container.data('sketch-id'), 
+      @container.data('sketch-title'),
+      @container.data('sketch-image')
+    )
 
   _getSketchServiceFromContainer: -> 
     new SketchService(@container.data('sketch-path'))
