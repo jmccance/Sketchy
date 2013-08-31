@@ -37,11 +37,6 @@ class Canvas
 
     @g.drawImage(image, 0, 0)
 
-  getRelativeCoords: (p) ->
-    rect = @elt.getBoundingClientRect()
-    origin = { x: rect.left, y: rect.top }
-    { x: p.x - origin.x, y: p.y - origin.y }
-
   drawLine: (p0, p1) ->
     @g.beginPath()
     @g.moveTo(p0.x, p0.y)
@@ -49,15 +44,15 @@ class Canvas
     @g.stroke()
 
   onMouseEnter: (e) ->
-    @pos = @getRelativeCoords(e)
+    @pos = @_getRelativeCoords(e)
 
   onMouseDown: (e) ->
     @state = 'dragging'
-    @pos = @getRelativeCoords(e)
+    @pos = @_getRelativeCoords(e)
 
   onMouseMove: (e) ->
     if @state == 'dragging'
-      pt = @getRelativeCoords(e)
+      pt = @_getRelativeCoords(e)
       @g.strokeStyle = @color
       @g.lineWidth = 4
       @g.lineCap = 'round'
@@ -74,7 +69,10 @@ class Canvas
     @g.clearRect(0, 0, @elt.width, @elt.height)
     @g.drawImage(image, 0, 0)
 
-# Knockout View Controller
+  _getRelativeCoords: (p) ->
+    rect = @elt.getBoundingClientRect()
+    origin = { x: rect.left, y: rect.top }
+    { x: p.x - origin.x, y: p.y - origin.y }
 
 class SketchyApp
 

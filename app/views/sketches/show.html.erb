@@ -6,7 +6,8 @@
      data-sketch-path='<%= sketch_path(@sketch) %>'>
   <h1>
     <%= link_to '&larr;'.html_safe, sketches_path() %>
-    <input value='<%= @sketch.title %>' data-bind='value: sketchTitle'></input>
+    <span data-bind='editableText: sketchTitle'
+           contenteditable='true'></span>
   </h1>
 
   <table class='color-picker'>
