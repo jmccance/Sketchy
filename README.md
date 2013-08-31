@@ -10,11 +10,11 @@ To launch Sketchy, you'll need Ruby 1.9, Rails 3, and MongoDB. The configuration
 
 To install the dependencies, navigate to the project root and run
 
-   bundle install
+    bundle install
 
 To run the application, run
 
-   rails server
+    rails server
 
 and navigate to http://localhost:3000/sketches.
 
