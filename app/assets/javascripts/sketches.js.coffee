@@ -74,6 +74,23 @@ class Canvas
     origin = { x: rect.left, y: rect.top }
     { x: p.x - origin.x, y: p.y - origin.y }
 
+##########################################################################
+
+#####
+# Custom binding for contenteditables. Courtesy of
+#   http://stackoverflow.com/questions/11448367/knockout-js-bind-to-editable-div-text
+ko.bindingHandlers.editableText =
+  init: (elt, valueAccessor) ->
+    $(elt).keyup ->
+      observable = valueAccessor()
+      observable($(this).text())
+      
+  update: (elt, valueAccessor) ->
+    value = ko.utils.unwrapObservable(valueAccessor())
+    $(elt).text(value)
+
+#####
+# Main view controller.
 class SketchyApp
 
   ##
@@ -107,7 +124,6 @@ class SketchyApp
     # color, since it creates a tight coupling between the classes used in 
     # the view and the pen color.
     @fgColor(e.target.className)
-    console.log(@fgColor())
 
   save: () ->
     @sketch.image = @canvas.toPng()
